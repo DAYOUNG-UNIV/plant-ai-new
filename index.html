@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flora-Wisp 시스템 개념도</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Wisp 아우라 애니메이션 */
+        .wisp-glow-green {
+            box-shadow: 0 0 20px 10px rgba(34, 197, 94, 0.5);
+            animation: pulse-green 2s infinite alternate;
+        }
+        .wisp-glow-red {
+            box-shadow: 0 0 20px 10px rgba(239, 68, 68, 0.5);
+            animation: pulse-red 2s infinite alternate;
+        }
+        .wisp-glow-orange {
+            box-shadow: 0 0 20px 10px rgba(249, 115, 22, 0.5);
+            animation: pulse-orange 2s infinite alternate;
+        }
+
+        @keyframes pulse-green { from { box-shadow: 0 0 15px 5px rgba(34, 197, 94, 0.4); } to { box-shadow: 0 0 30px 15px rgba(34, 197, 94, 0.7); } }
+        @keyframes pulse-red { from { box-shadow: 0 0 15px 5px rgba(239, 68, 68, 0.4); } to { box-shadow: 0 0 30px 15px rgba(239, 68, 68, 0.7); } }
+        @keyframes pulse-orange { from { box-shadow: 0 0 15px 5px rgba(249, 115, 22, 0.4); } to { box-shadow: 0 0 30px 15px rgba(249, 115, 22, 0.7); } }
+
+        /* 데이터 흐름 애니메이션 */
+        .data-flow-line {
+            position: relative;
+            overflow: hidden;
+        }
+        .data-flow-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+            animation: flow 1.5s infinite linear;
+        }
+        @keyframes flow { 100% { left: 200%; } }
+
+        .hidden-wisp { opacity: 0.1; transition: opacity 0.3s ease; }
+        .active-wisp { opacity: 1; transition: opacity 0.3s ease; }
+    </style>
+</head>
+<body class="flex flex-col h-screen">
+
+    <!-- Header -->
+    <header class="bg-white rounded-xl shadow-sm p-5 mb-6 text-center border-b-4 border-emerald-500">
+        <h1 class="text-2xl font-bold text-gray-800">Flora-Wisp: 다중 객체 맥락 인지형 MR 에이전트 시스템</h1>
+        <p class="text-gray-500 mt-2">Quest 3 시선 추적(Gaze) 기반 1:N 공간 인터랙션 및 Tool-Calling LLM 아키텍처</p>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- 1. 물리적 공간 & MR 프론트엔드 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 flex flex-col border border-gray-100">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-vr-cardboard text-emerald-500 mr-2"></i>1. MR 프론트엔드 (Quest 3)</h2>
+                <span class="text-xs font-semibold bg-blue-100 text-blue-700 px-2 py-1 rounded">Physical Space</span>
+            </div>
+            <p class="text-sm text-gray-600 mb-6">사용자가 바라보는 화분(Gaze)에 따라 컨텍스트가 자동으로 전환됩니다. <b>화분을 클릭해보세요!</b></p>
+            
+            <!-- Plants Area -->
+            <div class="flex justify-between items-end h-64 border-b-2 border-gray-200 pb-4 px-2 relative" id="plants-container">
+                
+                <!-- Plant 1: Mint -->
+                <div class="flex flex-col items-center cursor-pointer group" onclick="selectPlant('mint')">
+                    <!-- Wisp Avatar -->
+                    <div id="wisp-mint" class="w-16 h-16 rounded-full bg-red-500 text-white flex items-center justify-center font-bold text-xl mb-4 hidden-wisp transition-all duration-300">
+                        T_T
+                    </div>
+                    <!-- Plant Icon -->
+                    <div class="text-4xl text-emerald-600 group-hover:scale-110 transition-transform"><i class="fa-solid fa-leaf"></i></div>
+                    <div class="w-16 h-12 bg-amber-700 rounded-b-lg mt-1 flex items-center justify-center text-white text-xs shadow-md">민트</div>
+                    <div id="gaze-mint" class="absolute bottom-[-30px] text-blue-500 text-xs font-bold opacity-0 transition-opacity"><i class="fa-solid fa-eye"></i> Gaze Target</div>
+                </div>
+
+                <!-- Plant 2: Basil -->
+                <div class="flex flex-col items-center cursor-pointer group" onclick="selectPlant('basil')">
+                    <div id="wisp-basil" class="w-16 h-16 rounded-full bg-green-500 text-white flex items-center justify-center font-bold text-xl mb-4 wisp-glow-green transition-all duration-300">
+                        ^o^
+                    </div>
+                    <div class="text-4xl text-emerald-600 group-hover:scale-110 transition-transform"><i class="fa-solid fa-seedling"></i></div>
+                    <div class="w-16 h-12 bg-amber-700 rounded-b-lg mt-1 flex items-center justify-center text-white text-xs shadow-md border-2 border-yellow-400">바질</div>
+                    <div id="gaze-basil" class="absolute bottom-[-30px] text-blue-500 text-xs font-bold transition-opacity"><i class="fa-solid fa-eye"></i> Gaze Target</div>
+                </div>
+
+                <!-- Plant 3: Rosemary -->
+                <div class="flex flex-col items-center cursor-pointer group" onclick="selectPlant('rosemary')">
+                    <div id="wisp-rosemary" class="w-16 h-16 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold text-xl mb-4 hidden-wisp transition-all duration-300">
+                        >_<
+                    </div>
+                    <div class="text-4xl text-emerald-600 group-hover:scale-110 transition-transform"><i class="fa-solid fa-tree"></i></div>
+                    <div class="w-16 h-12 bg-amber-700 rounded-b-lg mt-1 flex items-center justify-center text-white text-xs shadow-md">로즈마리</div>
+                    <div id="gaze-rosemary" class="absolute bottom-[-30px] text-blue-500 text-xs font-bold opacity-0 transition-opacity"><i class="fa-solid fa-eye"></i> Gaze Target</div>
+                </div>
+
+            </div>
+
+            <!-- Voice Input Simulation -->
+            <div class="mt-8 bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <div class="text-xs text-gray-500 mb-1">🎙️ 사용자 음성 입력 (STT)</div>
+                <div class="font-medium text-gray-800">"얘는 지금 상태가 어때?"</div>
+            </div>
+        </div>
+
+        <!-- 2. API 브릿지 (JSON Payload) -->
+        <div class="bg-white rounded-xl shadow-sm p-6 flex flex-col justify-center relative border border-gray-100">
+            <div class="absolute inset-y-0 left-0 w-full h-full pointer-events-none flex items-center justify-center opacity-10">
+                <i class="fa-solid fa-network-wired text-9xl"></i>
+            </div>
+            
+            <h2 class="text-lg font-bold text-gray-800 mb-4 z-10 text-center"><i class="fa-solid fa-right-left text-blue-500 mr-2"></i>2. 실시간 동기화 (JSON Bridge)</h2>
+            
+            <!-- Request -->
+            <div class="bg-slate-800 rounded-lg p-4 mb-4 z-10 shadow-lg border border-slate-700">
+                <div class="text-xs text-blue-400 font-mono mb-2">▼ Request (Unity -> Backend)</div>
+                <pre id="json-request" class="text-sm text-green-300 font-mono break-words whitespace-pre-wrap">
+{
+  "context": "basil_1",
+  "query": "얘는 지금 상태가 어때?"
+}</pre>
+            </div>
+
+            <div class="h-8 flex justify-center items-center z-10">
+                <div class="w-1 h-full bg-gray-300 data-flow-line rounded"></div>
+            </div>
+
+            <!-- Response -->
+            <div class="bg-slate-800 rounded-lg p-4 mt-4 z-10 shadow-lg border border-slate-700">
+                <div class="text-xs text-purple-400 font-mono mb-2">▲ Response (Backend -> Unity)</div>
+                <pre id="json-response" class="text-sm text-yellow-300 font-mono break-words whitespace-pre-wrap">
+{
+  "speech": "흙이 촉촉해서 기분 최고야!",
+  "texticon": "^o^",
+  "color": "green",
+  "intensity": 0.8
+}</pre>
+            </div>
+            <div class="mt-4 text-center z-10">
+                <p class="text-xs text-gray-500 bg-white inline-block px-2 py-1 rounded-full border">3D 애니메이션 연산(Draw Call) 35% 감소</p>
+            </div>
+        </div>
+
+        <!-- 3. 백엔드 시스템 (LLM + IoT DB) -->
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex flex-col">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold text-gray-800"><i class="fa-solid fa-server text-purple-500 mr-2"></i>3. LLM 오케스트레이터</h2>
+                <span class="text-xs font-semibold bg-purple-100 text-purple-700 px-2 py-1 rounded">Python / LangChain</span>
+            </div>
+
+            <!-- Agent Box -->
+            <div class="bg-purple-50 rounded-lg p-4 mb-4 border border-purple-200">
+                <div class="font-bold text-purple-800 text-sm mb-2"><i class="fa-solid fa-brain"></i> Gemini 2.5 Flash Agent</div>
+                <ul class="text-xs text-gray-600 space-y-1">
+                    <li><i class="fa-solid fa-check text-green-500 mr-1"></i> 문맥 파악: <span id="backend-target" class="font-bold text-purple-600">basil_1</span> 식별</li>
+                    <li><i class="fa-solid fa-check text-green-500 mr-1"></i> 판단: 상태 요약 도구 호출 필요</li>
+                </ul>
+            </div>
+
+            <!-- Tool Calling Flow -->
+            <div class="relative pl-6 border-l-2 border-gray-200 ml-4 mb-4 space-y-4">
+                
+                <!-- Tool 1 -->
+                <div class="relative">
+                    <div class="absolute w-3 h-3 bg-blue-500 rounded-full -left-[31px] top-1"></div>
+                    <div class="bg-blue-50 rounded p-3 border border-blue-100 shadow-sm">
+                        <div class="text-xs font-bold text-blue-800 mb-1">🛠️ Tool: get_current_status(target)</div>
+                        <div class="text-xs text-gray-600 flex justify-between">
+                            <span>IoT Sensor DB 조회</span>
+                            <span id="backend-db-val" class="font-mono bg-white px-1 border rounded">Moisture: 60%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tool 2 -->
+                <div class="relative">
+                    <div class="absolute w-3 h-3 bg-emerald-500 rounded-full -left-[31px] top-1"></div>
+                    <div class="bg-emerald-50 rounded p-3 border border-emerald-100 shadow-sm">
+                        <div class="text-xs font-bold text-emerald-800 mb-1">📚 RAG: consult_guide(target)</div>
+                        <div class="text-xs text-gray-600 flex justify-between">
+                            <span>Vector DB 적정 생육 조건 확인</span>
+                            <span class="font-mono bg-white px-1 border rounded">Needs: 50~70%</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Audio Output -->
+            <div class="mt-auto bg-gray-800 rounded-lg p-3 text-white flex items-center justify-between shadow-md">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-volume-high text-emerald-400 mr-3 animate-pulse"></i>
+                    <span id="backend-tts" class="text-sm font-medium">"흙이 촉촉해서 기분 최고야!"</span>
+                </div>
+                <span class="text-[10px] text-gray-400">TTS Audio</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script for Interaction -->
+    <script>
+        const plantData = {
+            'mint': {
+                id: 'mint_1',
+                sensor: 'Moisture: 10% (Low)',
+                speech: '앗! 목이 너무 말라요. 물이 필요해요!',
+                texticon: 'T_T',
+                color: 'red',
+                intensity: 0.9,
+                cssClass: 'wisp-glow-red'
+            },
+            'basil': {
+                id: 'basil_1',
+                sensor: 'Moisture: 60% (Optimal)',
+                speech: '흙이 촉촉해서 기분 최고야!',
+                texticon: '^o^',
+                color: 'green',
+                intensity: 0.8,
+                cssClass: 'wisp-glow-green'
+            },
+            'rosemary': {
+                id: 'rosemary_1',
+                sensor: 'Temp: 32°C (High)',
+                speech: '으악! 햇빛이 너무 뜨거워요. 좀 더워요.',
+                texticon: '>_<',
+                color: 'orange',
+                intensity: 0.8,
+                cssClass: 'wisp-glow-orange'
+            }
+        };
+
+        function selectPlant(plantKey) {
+            const data = plantData[plantKey];
+
+            // 1. Reset all UI elements
+            ['mint', 'basil', 'rosemary'].forEach(key => {
+                // Remove borders
+                document.getElementById(`wisp-${key}`).parentElement.children[2].classList.remove('border-2', 'border-yellow-400');
+                // Hide Wisps
+                const wisp = document.getElementById(`wisp-${key}`);
+                wisp.classList.remove('active-wisp', 'wisp-glow-green', 'wisp-glow-red', 'wisp-glow-orange');
+                wisp.classList.add('hidden-wisp');
+                // Hide Gaze Text
+                document.getElementById(`gaze-${key}`).classList.add('opacity-0');
+            });
+
+            // 2. Activate selected plant (Frontend)
+            const activeWisp = document.getElementById(`wisp-${plantKey}`);
+            activeWisp.classList.remove('hidden-wisp');
+            activeWisp.classList.add('active-wisp', data.cssClass);
+            document.getElementById(`wisp-${plantKey}`).parentElement.children[2].classList.add('border-2', 'border-yellow-400');
+            document.getElementById(`gaze-${plantKey}`).classList.remove('opacity-0');
+
+            // 3. Update Request JSON
+            document.getElementById('json-request').textContent = 
+`{
+  "context": "${data.id}",
+  "query": "얘는 지금 상태가 어때?"
+}`;
+
+            // Simulate Network Delay
+            document.getElementById('json-response').textContent = "Processing...\n...";
+            document.getElementById('backend-tts').textContent = "...";
+            document.getElementById('backend-target').textContent = "Analyzing...";
+
+            setTimeout(() => {
+                // 4. Update Backend UI
+                document.getElementById('backend-target').textContent = data.id;
+                document.getElementById('backend-db-val').textContent = data.sensor;
+                
+                // 5. Update Response JSON
+                document.getElementById('json-response').textContent = 
+`{
+  "speech": "${data.speech}",
+  "texticon": "${data.texticon}",
+  "color": "${data.color}",
+  "intensity": ${data.intensity}
+}`;
+                // 6. Update TTS
+                document.getElementById('backend-tts').textContent = `"${data.speech}"`;
+                
+                // Update Wisp Texticon internally
+                activeWisp.textContent = data.texticon;
+
+            }, 600); // 600ms fake delay
+        }
+    </script>
+</body>
+</html>
