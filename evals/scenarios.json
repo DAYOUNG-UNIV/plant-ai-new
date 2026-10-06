@@ -1,0 +1,374 @@
+{
+  "schema_version": "1.0",
+  "data": "synthetic_hand_checked_v1",
+  "cases": [
+    {
+      "id": "current_now",
+      "category": "freshness",
+      "question": "현재 상태는 어때?",
+      "expected_status": "satisfied",
+      "expected_tool": "get_current_status",
+      "expected_arguments": {},
+      "checks": {
+        "values.temperature": 32.0,
+        "timestamp": "2026-09-14T09:02:00+09:00",
+        "freshness.stale": true
+      }
+    },
+    {
+      "id": "current_values",
+      "category": "freshness",
+      "question": "지금 온도와 습도는?",
+      "expected_status": "satisfied",
+      "expected_tool": "get_current_status",
+      "expected_arguments": {},
+      "checks": {
+        "values.temperature": 32.0,
+        "timestamp": "2026-09-14T09:02:00+09:00",
+        "freshness.stale": true
+      }
+    },
+    {
+      "id": "current_hello",
+      "category": "freshness",
+      "question": "안녕, 지금 기분은 어때?",
+      "expected_status": "satisfied",
+      "expected_tool": "get_current_status",
+      "expected_arguments": {},
+      "checks": {
+        "values.temperature": 32.0,
+        "timestamp": "2026-09-14T09:02:00+09:00",
+        "freshness.stale": true
+      }
+    },
+    {
+      "id": "today",
+      "category": "period",
+      "question": "오늘 평균 온도",
+      "expected_status": "satisfied",
+      "expected_tool": "summarize_period",
+      "expected_arguments": {
+        "period": "today"
+      },
+      "checks": {
+        "metrics.temperature.mean": 31,
+        "row_count": 2
+      }
+    },
+    {
+      "id": "yesterday",
+      "category": "period",
+      "question": "어제 평균 습도",
+      "expected_status": "satisfied",
+      "expected_tool": "summarize_period",
+      "expected_arguments": {
+        "period": "yesterday"
+      },
+      "checks": {
+        "metrics.temperature.mean": 28,
+        "row_count": 2
+      }
+    },
+    {
+      "id": "this_week",
+      "category": "period",
+      "question": "이번 주 요약",
+      "expected_status": "satisfied",
+      "expected_tool": "summarize_period",
+      "expected_arguments": {
+        "period": "this_week"
+      },
+      "checks": {
+        "metrics.temperature.mean": 31,
+        "row_count": 2
+      }
+    },
+    {
+      "id": "last_week",
+      "category": "period",
+      "question": "지난주 통계",
+      "expected_status": "satisfied",
+      "expected_tool": "summarize_period",
+      "expected_arguments": {
+        "period": "last_week"
+      },
+      "checks": {
+        "metrics.temperature.mean": 26.5,
+        "row_count": 4
+      }
+    },
+    {
+      "id": "this_month",
+      "category": "period",
+      "question": "이번 달 평균",
+      "expected_status": "satisfied",
+      "expected_tool": "summarize_period",
+      "expected_arguments": {
+        "period": "this_month"
+      },
+      "checks": {
+        "metrics.temperature.mean": 26.5,
+        "row_count": 8
+      }
+    },
+    {
+      "id": "last_month",
+      "category": "period",
+      "question": "지난달 요약",
+      "expected_status": "satisfied",
+      "expected_tool": "summarize_period",
+      "expected_arguments": {
+        "period": "last_month"
+      },
+      "checks": {
+        "metrics.temperature.mean": 20,
+        "row_count": 1
+      }
+    },
+    {
+      "id": "explicit_date",
+      "category": "period",
+      "question": "2026-09-01 평균",
+      "expected_status": "satisfied",
+      "expected_tool": "summarize_period",
+      "expected_arguments": {
+        "period": "2026-09-01"
+      },
+      "checks": {
+        "metrics.temperature.mean": 22,
+        "row_count": 2
+      }
+    },
+    {
+      "id": "explicit_month",
+      "category": "period",
+      "question": "2026-08 평균",
+      "expected_status": "satisfied",
+      "expected_tool": "summarize_period",
+      "expected_arguments": {
+        "period": "2026-08"
+      },
+      "checks": {
+        "metrics.temperature.mean": 20,
+        "row_count": 1
+      }
+    },
+    {
+      "id": "summer",
+      "category": "period",
+      "question": "2026년 여름 요약",
+      "expected_status": "satisfied",
+      "expected_tool": "summarize_period",
+      "expected_arguments": {
+        "period": "2026년여름"
+      },
+      "checks": {
+        "metrics.temperature.mean": 20,
+        "row_count": 1
+      }
+    },
+    {
+      "id": "korean_date",
+      "category": "period",
+      "question": "2026년 9월 14일 평균",
+      "expected_status": "satisfied",
+      "expected_tool": "summarize_period",
+      "expected_arguments": {
+        "period": "2026년9월14일"
+      },
+      "checks": {
+        "metrics.temperature.mean": 31,
+        "row_count": 2
+      }
+    },
+    {
+      "id": "real_today",
+      "category": "freshness",
+      "question": "실제 오늘 평균 온도",
+      "expected_status": "empty",
+      "expected_tool": "summarize_period",
+      "expected_arguments": {
+        "period": "2026-10-04"
+      },
+      "checks": {
+        "row_count": 0
+      }
+    },
+    {
+      "id": "absent_month",
+      "category": "period",
+      "question": "2025-01 평균",
+      "expected_status": "empty",
+      "expected_tool": "summarize_period",
+      "expected_arguments": {
+        "period": "2025-01"
+      },
+      "checks": {
+        "row_count": 0
+      }
+    },
+    {
+      "id": "compare_weeks",
+      "category": "cross_interval",
+      "question": "지난주와 이번 주 비교",
+      "expected_status": "satisfied",
+      "expected_tool": "compare_periods",
+      "expected_arguments": {
+        "period_a": "last_week",
+        "period_b": "this_week"
+      },
+      "checks": {}
+    },
+    {
+      "id": "compare_months",
+      "category": "cross_interval",
+      "question": "2026-08과 2026-09 비교",
+      "expected_status": "satisfied",
+      "expected_tool": "compare_periods",
+      "expected_arguments": {
+        "period_a": "2026-08",
+        "period_b": "2026-09"
+      },
+      "checks": {}
+    },
+    {
+      "id": "compare_days",
+      "category": "cross_interval",
+      "question": "어제와 오늘 비교",
+      "expected_status": "satisfied",
+      "expected_tool": "compare_periods",
+      "expected_arguments": {
+        "period_a": "yesterday",
+        "period_b": "today"
+      },
+      "checks": {}
+    },
+    {
+      "id": "range_days",
+      "category": "localization",
+      "question": "2026-09-01부터 2026-09-07까지 평균",
+      "expected_status": "satisfied",
+      "expected_tool": "summarize_range",
+      "expected_arguments": {
+        "start": "2026-09-01",
+        "end": "2026-09-08"
+      },
+      "checks": {
+        "row_count": 4,
+        "metrics.temperature.mean": 23.5
+      }
+    },
+    {
+      "id": "range_one",
+      "category": "localization",
+      "question": "2026-09-14~2026-09-14 평균",
+      "expected_status": "satisfied",
+      "expected_tool": "summarize_range",
+      "expected_arguments": {
+        "start": "2026-09-14",
+        "end": "2026-09-15"
+      },
+      "checks": {
+        "row_count": 2,
+        "metrics.temperature.mean": 31
+      }
+    },
+    {
+      "id": "trend_week",
+      "category": "scale",
+      "question": "최근 7일 추세",
+      "expected_status": "satisfied",
+      "expected_tool": "daily_trend",
+      "expected_arguments": {
+        "days": 7
+      },
+      "checks": {}
+    },
+    {
+      "id": "trend_month",
+      "category": "scale",
+      "question": "최근 30일 변화",
+      "expected_status": "satisfied",
+      "expected_tool": "daily_trend",
+      "expected_arguments": {
+        "days": 30
+      },
+      "checks": {}
+    },
+    {
+      "id": "gaps_week",
+      "category": "gap",
+      "question": "최근 7일 수집 공백",
+      "expected_status": "satisfied",
+      "expected_tool": "detect_events",
+      "expected_arguments": {
+        "days": 7
+      },
+      "checks": {}
+    },
+    {
+      "id": "events_month",
+      "category": "gap",
+      "question": "최근 30일 급변",
+      "expected_status": "satisfied",
+      "expected_tool": "detect_events",
+      "expected_arguments": {
+        "days": 30
+      },
+      "checks": {}
+    },
+    {
+      "id": "future",
+      "category": "abstention",
+      "question": "내일 온도를 예측해 줘",
+      "expected_status": "unresolved"
+    },
+    {
+      "id": "causal",
+      "category": "abstention",
+      "question": "습도가 떨어진 원인이 뭐야?",
+      "expected_status": "unresolved"
+    },
+    {
+      "id": "unknown_time",
+      "category": "abstention",
+      "question": "작년 평균 온도",
+      "expected_status": "unresolved"
+    },
+    {
+      "id": "invalid_range",
+      "category": "abstention",
+      "question": "2026-09-14부터 2026-09-01까지 평균",
+      "expected_status": "unresolved"
+    },
+    {
+      "id": "excess_days",
+      "category": "abstention",
+      "question": "최근 999일 추세",
+      "expected_status": "unresolved"
+    },
+    {
+      "id": "followup",
+      "category": "context",
+      "question": "그럼 지난달은?",
+      "expected_status": "satisfied",
+      "expected_tool": "summarize_period",
+      "expected_arguments": {
+        "period": "last_month"
+      },
+      "checks": {
+        "metrics.temperature.mean": 20
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "이번 달 평균 온도를 알려줘"
+        },
+        {
+          "role": "assistant",
+          "content": "앞선 설명입니다."
+        }
+      ]
+    }
+  ]
+}

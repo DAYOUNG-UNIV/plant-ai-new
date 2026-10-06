@@ -1,0 +1,25 @@
+.venv/
+venv/
+env/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.streamlit/secrets.toml
+.streamlit/secrets.*.toml
+!.streamlit/secrets.example.toml
+.env
+faiss_index/
+*.pkl
+*.faiss
+.DS_Store
+.vscode/
+.idea/
+*.csv
+*.xlsx
+check_models.py
+artifacts/
+*.log
+
+# Generated exhibition documents and rendering intermediates
+output/
+tmp/

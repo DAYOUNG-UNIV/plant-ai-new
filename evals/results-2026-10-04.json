@@ -1,0 +1,348 @@
+{
+  "schema_version": "1.0",
+  "evaluation": "offline_query_workflow",
+  "data": "synthetic_hand_checked_v1",
+  "live_model_evaluated": false,
+  "natural_language_factuality_evaluated": false,
+  "passed": 30,
+  "total": 30,
+  "median_elapsed_ms": 0.6,
+  "model_calls": 0,
+  "categories": {
+    "freshness": {
+      "passed": 4,
+      "total": 4
+    },
+    "period": {
+      "passed": 11,
+      "total": 11
+    },
+    "cross_interval": {
+      "passed": 3,
+      "total": 3
+    },
+    "localization": {
+      "passed": 2,
+      "total": 2
+    },
+    "scale": {
+      "passed": 2,
+      "total": 2
+    },
+    "gap": {
+      "passed": 2,
+      "total": 2
+    },
+    "abstention": {
+      "passed": 5,
+      "total": 5
+    },
+    "context": {
+      "passed": 1,
+      "total": 1
+    }
+  },
+  "results": [
+    {
+      "id": "current_now",
+      "category": "freshness",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 1.4,
+      "tool_count": 1
+    },
+    {
+      "id": "current_values",
+      "category": "freshness",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.3,
+      "tool_count": 1
+    },
+    {
+      "id": "current_hello",
+      "category": "freshness",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.3,
+      "tool_count": 1
+    },
+    {
+      "id": "today",
+      "category": "period",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.8,
+      "tool_count": 1
+    },
+    {
+      "id": "yesterday",
+      "category": "period",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.6,
+      "tool_count": 1
+    },
+    {
+      "id": "this_week",
+      "category": "period",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.6,
+      "tool_count": 1
+    },
+    {
+      "id": "last_week",
+      "category": "period",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.6,
+      "tool_count": 1
+    },
+    {
+      "id": "this_month",
+      "category": "period",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.5,
+      "tool_count": 1
+    },
+    {
+      "id": "last_month",
+      "category": "period",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.5,
+      "tool_count": 1
+    },
+    {
+      "id": "explicit_date",
+      "category": "period",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.7,
+      "tool_count": 1
+    },
+    {
+      "id": "explicit_month",
+      "category": "period",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.6,
+      "tool_count": 1
+    },
+    {
+      "id": "summer",
+      "category": "period",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.7,
+      "tool_count": 1
+    },
+    {
+      "id": "korean_date",
+      "category": "period",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.6,
+      "tool_count": 1
+    },
+    {
+      "id": "real_today",
+      "category": "freshness",
+      "passed": true,
+      "failures": [],
+      "audit_status": "empty",
+      "model_calls": 0,
+      "elapsed_ms": 0.5,
+      "tool_count": 1
+    },
+    {
+      "id": "absent_month",
+      "category": "period",
+      "passed": true,
+      "failures": [],
+      "audit_status": "empty",
+      "model_calls": 0,
+      "elapsed_ms": 0.4,
+      "tool_count": 1
+    },
+    {
+      "id": "compare_weeks",
+      "category": "cross_interval",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.9,
+      "tool_count": 1
+    },
+    {
+      "id": "compare_months",
+      "category": "cross_interval",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.9,
+      "tool_count": 1
+    },
+    {
+      "id": "compare_days",
+      "category": "cross_interval",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 1.0,
+      "tool_count": 1
+    },
+    {
+      "id": "range_days",
+      "category": "localization",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.9,
+      "tool_count": 1
+    },
+    {
+      "id": "range_one",
+      "category": "localization",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.6,
+      "tool_count": 1
+    },
+    {
+      "id": "trend_week",
+      "category": "scale",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 1.6,
+      "tool_count": 1
+    },
+    {
+      "id": "trend_month",
+      "category": "scale",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 2.8,
+      "tool_count": 1
+    },
+    {
+      "id": "gaps_week",
+      "category": "gap",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.4,
+      "tool_count": 1
+    },
+    {
+      "id": "events_month",
+      "category": "gap",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.4,
+      "tool_count": 1
+    },
+    {
+      "id": "future",
+      "category": "abstention",
+      "passed": true,
+      "failures": [],
+      "audit_status": "unresolved",
+      "model_calls": 0,
+      "elapsed_ms": 0.1,
+      "tool_count": 0
+    },
+    {
+      "id": "causal",
+      "category": "abstention",
+      "passed": true,
+      "failures": [],
+      "audit_status": "unresolved",
+      "model_calls": 0,
+      "elapsed_ms": 0.4,
+      "tool_count": 1
+    },
+    {
+      "id": "unknown_time",
+      "category": "abstention",
+      "passed": true,
+      "failures": [],
+      "audit_status": "unresolved",
+      "model_calls": 0,
+      "elapsed_ms": 0.1,
+      "tool_count": 0
+    },
+    {
+      "id": "invalid_range",
+      "category": "abstention",
+      "passed": true,
+      "failures": [],
+      "audit_status": "unresolved",
+      "model_calls": 0,
+      "elapsed_ms": 0.1,
+      "tool_count": 0
+    },
+    {
+      "id": "excess_days",
+      "category": "abstention",
+      "passed": true,
+      "failures": [],
+      "audit_status": "unresolved",
+      "model_calls": 0,
+      "elapsed_ms": 0.1,
+      "tool_count": 0
+    },
+    {
+      "id": "followup",
+      "category": "context",
+      "passed": true,
+      "failures": [],
+      "audit_status": "satisfied",
+      "model_calls": 0,
+      "elapsed_ms": 0.7,
+      "tool_count": 1
+    }
+  ],
+  "limitations": "Hand-authored regression scenarios on synthetic data; not an independent held-out benchmark, Gemini quality score, or user study."
+}
