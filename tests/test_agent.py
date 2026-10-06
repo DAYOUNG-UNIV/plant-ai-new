@@ -12,7 +12,7 @@ from google.genai import errors, types
 
 from plant_ai.agent import (
     MAX_HISTORY_CHARS, MAX_MODEL_EVIDENCE_CHARS, PlantTools, TOOLS,
-    answer_question, local_answer,
+    answer_question, classify_error, local_answer,
 )
 from plant_ai.analytics import SensorAnalytics
 from plant_ai.knowledge import BasilKnowledge
@@ -162,6 +162,54 @@ def test_provider_429_is_sanitized_without_retry_and_cleanup_cannot_override(pla
     assert "한도" in answer.text and secret not in json.dumps(asdict(answer), ensure_ascii=False)
     assert creation[0]["http_options"].retry_options.attempts == 1
     assert creation[0]["http_options"].timeout == 20000
+
+
+
+@pytest.mark.parametrize("status,message,expected", [
+    (402, "Payment Required; previous 429 RESOURCE_EXHAUSTED", "billing"),
+    (429, "Your prepayment credits are depleted. Visit AI Studio billing prepay.", "billing"),
+    (429, "Your PREPAID CREDIT BALANCE has been exhausted.", "billing"),
+    (429, "Too many requests: rate limit exceeded.", "quota"),
+    (429, "Rate limit exceeded. Your prepaid credits remain available.", "quota"),
+])
+def test_payment_error_takes_priority_over_generic_quota(status, message, expected):
+    failure = errors.ClientError(status, {"error": {"code": status, "message": message}})
+    code, safe_message = classify_error(failure)
+    assert code == expected
+    assert message not in safe_message
+    if expected == "billing":
+        assert "운영자의 API 결제 상태" in safe_message
+        assert all(word not in safe_message for word in ["분당", "일일", "무료", "재시도", "충전", "구매"])
+
+
+def test_wrapped_embedding_prepayment_error_is_recognized_without_status_attribute():
+    failure = RuntimeError("Error embedding content: 429 Your prepayment credits are depleted.")
+    assert classify_error(failure)[0] == "billing"
+
+
+@pytest.mark.parametrize("status,message", [
+    (402, "Payment Required"),
+    (429, "Your prepayment credits are depleted. See https://aistudio.google.com/billing/prepay"),
+])
+def test_billing_failure_keeps_local_evidence_without_retry_or_secret_leak(plant_tools, monkeypatch, status, message):
+    secret = "fake-private-billing-test-key"
+    failure = errors.ClientError(status, {"error": {"code": status, "message": message + "; key=" + secret}})
+    client = FakeClient([failure])
+    creation = []
+    def factory(**kwargs):
+        creation.append(kwargs)
+        return client
+    monkeypatch.setattr(genai, "Client", factory)
+    answer = answer_question("현재 상태", plant_tools, api_key=secret)
+    assert answer.mode == "local" and answer.error_code == "billing"
+    assert answer.model_calls == len(client.calls) == 1
+    assert client.closed == 1
+    assert creation[0]["http_options"].retry_options.attempts == 1
+    assert "운영자의 API 결제 상태" in answer.text and "기본 안내" in answer.text
+    assert "2026-09-02" in answer.text
+    assert any(record["tool"] == "get_current_status" and record["result"]["ok"] for record in answer.evidence)
+    exported = json.dumps(asdict(answer), ensure_ascii=False)
+    assert secret not in exported and message not in exported
 
 
 def test_successful_answer_survives_transport_close_error(plant_tools, monkeypatch):

@@ -9,13 +9,13 @@
 
 2026-10-07 기준 배포 대상은 공개 저장소 **`DAYOUNG-UNIV/plant-ai-new`의 `exhibition-recovery` 브랜치**입니다. 이 브랜치에는 복구 코드와 실제 기록 데모가 포함되어 있습니다. **새 본 사이트와 새 데모 사이트의 Streamlit 실행은 아직 확인되지 않았습니다.** 아래 절차로 새 주소 두 개를 생성하고 동작을 확인합니다. 기존 앱 [chatty-plant.streamlit.app](https://chatty-plant.streamlit.app/)의 주소·연결 브랜치·설정은 그대로 보존합니다.
 
-기존 앱은 2026-10-07 00:01 KST 확인에서 `Error running app` 화면이 보였습니다. 이 화면만으로 Gemini 키 문제라고 판단할 수 없습니다. 정확한 원인은 기존 앱의 Manage app에서 실행 로그를 확인해야 하며, 새 앱을 만들기 위해 기존 앱을 삭제하지 않습니다.
+기존 앱의 제공된 로그에서는 먼저 GitHub 소스 복제 실패가 확인됐고, 연결 복구 후에는 원본 앱의 외부 임베딩 요청에서 선불 크레딧 소진 오류가 확인됐습니다. 2026-10-07 00:55 KST 공개 초기 연결로 서버 Python 3.12.15를 확인했습니다. 기존 주소의 복구는 비공개 `plant-ai/main/app.py`에 이 복구 버전을 반영하여 진행하며, 아래 새 주소 두 개의 배포와 별도로 실행 상태를 확인합니다. 기존 앱을 삭제할 필요는 없습니다.
 
 ## 1. 새 공개 저장소의 코드 반영 확인
 
 사용자가 복구 코드 공개에 동의하여 [DAYOUNG-UNIV/plant-ai-new](https://github.com/DAYOUNG-UNIV/plant-ai-new)를 새 배포 저장소로 선택했습니다. 기존 `index.html`을 보존하고, **`exhibition-recovery` 브랜치에 배포 파일 51개**를 추가했습니다. 아래 진입점 파일을 사용해 Streamlit 배포를 진행합니다. `index.html`은 Python 앱의 실행 파일이 아닙니다.
 
-이전 비공개 `DAYOUNG-UNIV/plant-ai`에는 복구 코드 [97a4cb4](https://github.com/DAYOUNG-UNIV/plant-ai/commit/97a4cb4d9b1cde5f087e2fc15d1a39d177b2fe9b)와 후속 안내 [71bcf25](https://github.com/DAYOUNG-UNIV/plant-ai/commit/71bcf2529a3c85d7581163e5924152483a8a1836)가 게시되어 있습니다. 이는 **이전 저장소의 이력**입니다. 현재 배포에는 새 공개 저장소의 브랜치를 사용합니다. 원본 비공개 저장소와 `main`의 `798a653`은 그대로 보존합니다.
+이전 비공개 `DAYOUNG-UNIV/plant-ai`에는 복구 코드 [97a4cb4](https://github.com/DAYOUNG-UNIV/plant-ai/commit/97a4cb4d9b1cde5f087e2fc15d1a39d177b2fe9b)와 후속 안내 [71bcf25](https://github.com/DAYOUNG-UNIV/plant-ai/commit/71bcf2529a3c85d7581163e5924152483a8a1836)가 게시되어 있습니다. 이는 **이전 저장소의 이력**입니다. 현재 배포에는 새 공개 저장소의 브랜치를 사용합니다. 원본 커밋 `798a653`은 Git 이력에 보존하며, 기존 사이트의 `main`에는 복구 버전을 반영합니다. 원본 저장소의 비공개 설정은 유지합니다.
 
 새 저장소에서 확인할 필수 구조:
 
@@ -56,7 +56,7 @@ demo/index.html                 미리 계산된 데모
 
 1. https://aistudio.google.com/api-keys 에 로그인합니다.
 2. 기존 키가 사용 가능하면 유지하고, Blocked 등으로 사용할 수 없으면 새 키를 만듭니다. Google 공식 문서에 따르면 장기간 사용하지 않은 제한 없는 기존 키는 차단될 수 있습니다.
-3. 무료로 운영하려면 연결 프로젝트의 Free Tier 여부와 사용 가능한 모델 할당량을 AI Studio에서 확인합니다. 이 앱이 결제를 켜지는 않습니다.
+3. 무료로 운영하려면 [Projects](https://aistudio.google.com/projects)의 Billing tier가 **Free**인 프로젝트를 확인한 뒤 [API keys](https://aistudio.google.com/api-keys)에서 해당 프로젝트의 키를 사용합니다. 무료 프로젝트가 없다면 결제 계정을 연결하지 않은 프로젝트를 준비하고 실제 Free 표시와 모델 할당량을 확인합니다. 이 앱이 결제를 켜지는 않습니다. 같은 유료 프로젝트에서 키만 다시 만드는 것으로 무료 등급이 되지는 않습니다.
 4. 새 본 사이트를 만들 때 Advanced settings → Secrets에 아래 값을 입력합니다. 이미 새 앱을 만들었다면 해당 앱의 Settings → Secrets에서 저장합니다. 기존 앱의 Secrets는 그대로 두고, 실제 키를 채팅·GitHub에 붙여 넣지 않습니다.
 
 ```toml
@@ -94,7 +94,9 @@ DEMO_SITE_URL = ""
 - 키가 설정됐다는 표시만 있음: 아직 API 요청 성공을 확인한 것이 아닙니다.
 - 키 오류·권한 오류: AI Studio 키 상태와 해당 프로젝트 권한을 확인합니다.
 - 모델 없음·지원하지 않음: GEMINI_MODEL과 계정에서 사용할 수 있는 모델을 확인합니다.
-- 429: 프로젝트 사용량 한도나 순간 요청 제한을 확인하고 데모로 이동합니다. 키를 여러 개 만드는 것으로 프로젝트 한도가 늘지는 않습니다.
+- `prepayment credits are depleted` 또는 402 결제 오류: 연결된 선불 결제 잔액 문제입니다. 429로 전달되어도 일반 요청량 제한과 구분합니다. 잔액이 없어도 자동으로 Free Tier가 되지는 않으며, 같은 결제 계정의 다른 키로 바꾸는 것으로 해결되지 않습니다. 무료 운영은 Free Tier 프로젝트의 키와 해당 모델 할당량을 확인합니다.
+- 그 밖의 429: 프로젝트 사용량 한도나 순간 요청 제한을 확인하고 데모로 이동합니다. 키를 여러 개 만드는 것으로 프로젝트 한도가 늘지는 않습니다.
+- 이 복구 버전의 가이드 검색은 로컬 BM25·문자 n-gram을 사용하므로 외부 임베딩 API나 그 결제 잔액이 필요하지 않습니다. 자유 AI 대화의 API 결제 오류가 나면 기록 근거를 포함한 기본 안내로 전환하고 AI 생성 응답과 구분합니다.
 - 시트 읽기 실패: ID·탭 번호와 읽기 권한을 확인합니다. 현재 앱은 로그인 없는 CSV 내보내기 방식입니다.
 
 ## 데모 기록 갱신
@@ -114,5 +116,6 @@ DEMO_SITE_URL = ""
 - Python 변경: https://docs.streamlit.io/deploy/streamlit-community-cloud/manage-your-app/upgrade-python
 - 공개·비공개 앱: https://docs.streamlit.io/deploy/streamlit-community-cloud/share-your-app
 - Gemini 키: https://ai.google.dev/gemini-api/docs/api-key
+- 선불 결제와 Free Tier: https://ai.google.dev/gemini-api/docs/billing#prepay
 - Gemini 요금: https://ai.google.dev/gemini-api/docs/pricing
 - 사용량 제한: https://ai.google.dev/gemini-api/docs/rate-limits

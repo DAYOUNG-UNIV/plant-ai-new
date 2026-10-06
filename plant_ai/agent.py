@@ -126,6 +126,13 @@ def classify_error(error: Exception) -> tuple[str, str]:
     """Never expose a provider exception (which may include request secrets)."""
     code = str(getattr(error, "code", ""))
     description = str(error).lower()
+    # Some providers still report an empty prepaid balance as 429. Detect this
+    # explicit billing condition before the general quota branch.
+    prepaid_depleted = re.search(
+        r"\b(?:prepayment|prepaid|prepay)\s+(?:credits?(?:\s+balance)?|balance)\b"
+        r"[^.!?\n]{0,100}\b(?:depleted|exhausted|empty|zero)\b", description)
+    if code == "402" or prepaid_depleted:
+        return "billing", "운영자의 API 결제 상태로 AI 응답이 일시 중단됐어요. 기록 조회와 기본 안내는 계속 이용할 수 있어요."
     if code == "429" or "429" in description or "resource_exhausted" in description:
         return "quota", "무료 API 사용량 한도에 도달해 기본 안내로 전환했어요. AI Studio에서 분당·일일 잔여 한도를 확인해 주세요."
     if code in {"401", "403"} or "api_key_invalid" in description or "api key not valid" in description:
